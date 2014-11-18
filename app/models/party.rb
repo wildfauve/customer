@@ -15,9 +15,9 @@ class Party
   # {"ref":"sub","id":"545963db4d61745aead30000"}],
   # "id_token":{"sub":"545963db4d61745aead30000"}}
   def self.id_reference(event)
-    link = event["ref"].find {|h| h["ref"] == "party"}
-    return if !link
-    party = self.find(link.split("/").last)
+    ref = event["ref"].find {|h| h["ref"] == "party"}
+    return if !ref
+    party = self.find(ref["link"].split("/").last)
     party.add_references(ref: event["ref"])
   end
   
@@ -30,15 +30,14 @@ class Party
   end
   
   
-  
   def add_references(ref: nil)
     ref.each do |r|
       if r["ref"] != "party"
         id = self.id_references.where(ref: r["ref"]).first
         if id
-          id.update_it(ref: r[href], link: r["link"], id: r["id"])
+          id.update_it(ref: r[ref], link: r["link"], identifier: r["id"])
         else
-          self.id_references << IdReference.create_it(ref: r["ref"], link: r["link"], id: r["id"])
+          self.id_references << IdReference.create_it(ref: r["ref"], link: r["link"], identifier: r["id"])
         end
       end
     end

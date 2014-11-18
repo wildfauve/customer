@@ -15,6 +15,12 @@ class Api::V1::PartiesController < Api::ApplicationController
     party.create_me(party: params)
   end
   
+  def update
+    party = Party.find(params[:id])
+    party.subscribe(self)
+    party.update_me(party: params)
+  end
+  
   def successful_create_event(party)
     @party = party
     render 'party', status: :created, location: api_v1_party_path(@party)
