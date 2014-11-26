@@ -1,12 +1,13 @@
 class Api::V1::PartiesController < Api::ApplicationController
   
   def index
+    @parties = Party.all
     
   end
   
   def show
     @party = Party.find(params[:id])
-    render 'party', status: :ok, location: api_v1_party_path(@party)
+    render 'show', location: api_v1_party_path(@party)
   end
   
   def create
@@ -21,7 +22,7 @@ class Api::V1::PartiesController < Api::ApplicationController
     party.update_me(party: params)
   end
   
-  def successful_create_event(party)
+  def successful_save_event(party)
     @party = party
     render 'party', status: :created, location: api_v1_party_path(@party)
   end

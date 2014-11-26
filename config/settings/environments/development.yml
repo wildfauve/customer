@@ -7,6 +7,8 @@ oauth:
   id_logout_service_url: "http://localhost:3013/logout"  
   id_userinfo_service_url: "http://localhost:3013/userinfo"  
 services:
+  self:
+    host: "http://localhost:3021"
   customers:
     index: "http://localhost:3021/api/customers"
     show: "http://localhost:3021/api/customers/{id}"

@@ -18,7 +18,7 @@ class Party
     ref = event["ref"].find {|h| h["ref"] == "party"}
     return if !ref
     party = self.find(ref["link"].split("/").last)
-    party.add_references(ref: event["ref"])
+    party.add_references(refs: event["ref"])
   end
   
   
@@ -26,22 +26,44 @@ class Party
     self.name = party[:name]
     self.age = party[:age]
     self.save
-    publish(:successful_create_event, self)
+    publish(:successful_save_event, self)
+  end
+
+  def update_me(party: nil)
+    self.name = party[:name]
+    self.age = party[:age]
+    self.save
+    publish(:successful_save_event, self)
   end
   
   
-  def add_references(ref: nil)
-    ref.each do |r|
+  def add_references(refs: nil)
+    refs.each do |r|
       if r["ref"] != "party"
         id = self.id_references.where(ref: r["ref"]).first
         if id
-          id.update_it(ref: r[ref], link: r["link"], identifier: r["id"])
+          id.update_it(ref: r["ref"], link: r["link"], identifier: r["id"])
         else
           self.id_references << IdReference.create_it(ref: r["ref"], link: r["link"], identifier: r["id"])
         end
       end
     end
     self.save
+  end
+  
+  def party_change_event
+    {
+      kind: "party_change",
+      party: {
+        name: self.name,
+        age: self.age,
+        _links: {
+          self: {
+            href: url_helpers.api_v1_party(self, host: Setting.services(:self, :host))
+          }
+        }
+      }
+    }
   end
   
   

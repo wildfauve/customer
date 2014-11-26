@@ -26,7 +26,7 @@ class Api::ApplicationController < ActionController::Base
   #end
   
   def error(status: :bad_request, message: nil)
-    render 'api/v1/shared/error', locals: {status: status, message: message}
+    render 'api/v1/shared/error', status: status, locals: {status: status, message: message}
   end
     
   
