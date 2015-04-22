@@ -24,10 +24,11 @@ class Api::V1::PartiesController < Api::ApplicationController
   
   def successful_save_event(party)
     @party = party
-    render 'party', status: :created, location: api_v1_party_path(@party)
+    render 'create', status: :created, location: api_v1_party_path(@party)
   end
   
   def successful_update_event(party)
+    @party = party
   end
   
 end

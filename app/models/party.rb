@@ -33,7 +33,7 @@ class Party
     self.name = party[:name]
     self.age = party[:age]
     self.save
-    publish(:successful_save_event, self)
+    publish(:successful_update_event, self)
   end
   
   

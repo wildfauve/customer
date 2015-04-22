@@ -32,5 +32,11 @@ class EventHandler
   def self.successful_save_event(party)
     self.publish(exchange: "events", message: party.party_change_event)
   end
+
+  def self.successful_update_event(party)
+    self.publish(exchange: "events", message: party.party_change_event)
+  end
+
+
   
 end
